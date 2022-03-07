@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "1091330806802",
+    "project_id": "naito-loovic-demo",
+    "storage_bucket": "naito-loovic-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091330806802:android:1906185776fe191018b4cb",
+        "android_client_info": {
+          "package_name": "jp.co.loovic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091330806802-2t1p2k5280qlgmoa2bf9des60tjulth9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK5vitrFfgtrv1fVNBeuZgqGq5Vwg-Y-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091330806802-2t1p2k5280qlgmoa2bf9des60tjulth9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1091330806802-ksp3mg42ui7rohg748vvqevhngsd1f66.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "naito.loovic.demo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091330806802:android:b890f3ef6e5f93d218b4cb",
+        "android_client_info": {
+          "package_name": "naito.loovic.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091330806802-2t1p2k5280qlgmoa2bf9des60tjulth9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK5vitrFfgtrv1fVNBeuZgqGq5Vwg-Y-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091330806802-2t1p2k5280qlgmoa2bf9des60tjulth9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1091330806802-ksp3mg42ui7rohg748vvqevhngsd1f66.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "naito.loovic.demo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

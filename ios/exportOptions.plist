@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>provisioningProfiles</key>
+    <dict>
+      <key>jp.co.flutterApp</key>
+      <string>loovic adhoc</string>
+    </dict>
+    <key>method</key>
+    <string>ad-hoc</string>
+    <key>teamID</key>
+    <string>WBKU63L62B</string>
+    <key>signingCertificate</key>
+    <string>iOS Distribution</string>
+    <key>uploadBitcode</key>
+    <false/>
+    <key>uploadSymbols</key>
+    <true/>
+  </dict>
+</plist>
