@@ -26,6 +26,7 @@ class _$JsonNavigationParamsTearOff {
       double degrees = 0,
       double distanceNext = 0,
       double degreesNext = 0,
+      double distanceCrossPoint = 0,
       List<JsonLatLng> latlng = const [],
       List<bool> activeLatLng = const [],
       bool isRouteNavigation = false,
@@ -36,6 +37,7 @@ class _$JsonNavigationParamsTearOff {
       degrees,
       distanceNext,
       degreesNext,
+      distanceCrossPoint,
       latlng,
       activeLatLng,
       isRouteNavigation,
@@ -58,6 +60,7 @@ mixin _$JsonNavigationParams {
   double get degrees => throw _privateConstructorUsedError;
   double get distanceNext => throw _privateConstructorUsedError;
   double get degreesNext => throw _privateConstructorUsedError;
+  double get distanceCrossPoint => throw _privateConstructorUsedError;
   List<JsonLatLng> get latlng => throw _privateConstructorUsedError;
   List<bool> get activeLatLng => throw _privateConstructorUsedError;
   bool get isRouteNavigation => throw _privateConstructorUsedError;
@@ -80,6 +83,7 @@ abstract class $JsonNavigationParamsCopyWith<$Res> {
       double degrees,
       double distanceNext,
       double degreesNext,
+      double distanceCrossPoint,
       List<JsonLatLng> latlng,
       List<bool> activeLatLng,
       bool isRouteNavigation,
@@ -102,6 +106,7 @@ class _$JsonNavigationParamsCopyWithImpl<$Res>
     Object? degrees = freezed,
     Object? distanceNext = freezed,
     Object? degreesNext = freezed,
+    Object? distanceCrossPoint = freezed,
     Object? latlng = freezed,
     Object? activeLatLng = freezed,
     Object? isRouteNavigation = freezed,
@@ -127,6 +132,10 @@ class _$JsonNavigationParamsCopyWithImpl<$Res>
       degreesNext: degreesNext == freezed
           ? _value.degreesNext
           : degreesNext // ignore: cast_nullable_to_non_nullable
+              as double,
+      distanceCrossPoint: distanceCrossPoint == freezed
+          ? _value.distanceCrossPoint
+          : distanceCrossPoint // ignore: cast_nullable_to_non_nullable
               as double,
       latlng: latlng == freezed
           ? _value.latlng
@@ -161,6 +170,7 @@ abstract class _$JsonNavigationParamsCopyWith<$Res>
       double degrees,
       double distanceNext,
       double degreesNext,
+      double distanceCrossPoint,
       List<JsonLatLng> latlng,
       List<bool> activeLatLng,
       bool isRouteNavigation,
@@ -185,6 +195,7 @@ class __$JsonNavigationParamsCopyWithImpl<$Res>
     Object? degrees = freezed,
     Object? distanceNext = freezed,
     Object? degreesNext = freezed,
+    Object? distanceCrossPoint = freezed,
     Object? latlng = freezed,
     Object? activeLatLng = freezed,
     Object? isRouteNavigation = freezed,
@@ -210,6 +221,10 @@ class __$JsonNavigationParamsCopyWithImpl<$Res>
       degreesNext == freezed
           ? _value.degreesNext
           : degreesNext // ignore: cast_nullable_to_non_nullable
+              as double,
+      distanceCrossPoint == freezed
+          ? _value.distanceCrossPoint
+          : distanceCrossPoint // ignore: cast_nullable_to_non_nullable
               as double,
       latlng == freezed
           ? _value.latlng
@@ -242,6 +257,7 @@ class _$_JsonNavigationParams
       this.degrees = 0,
       this.distanceNext = 0,
       this.degreesNext = 0,
+      this.distanceCrossPoint = 0,
       this.latlng = const [],
       this.activeLatLng = const [],
       this.isRouteNavigation = false,
@@ -265,6 +281,9 @@ class _$_JsonNavigationParams
   @JsonKey(defaultValue: 0)
   @override
   final double degreesNext;
+  @JsonKey(defaultValue: 0)
+  @override
+  final double distanceCrossPoint;
   @JsonKey(defaultValue: const [])
   @override
   final List<JsonLatLng> latlng;
@@ -280,7 +299,7 @@ class _$_JsonNavigationParams
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'JsonNavigationParams(naviIndex: $naviIndex, distance: $distance, degrees: $degrees, distanceNext: $distanceNext, degreesNext: $degreesNext, latlng: $latlng, activeLatLng: $activeLatLng, isRouteNavigation: $isRouteNavigation, error: $error)';
+    return 'JsonNavigationParams(naviIndex: $naviIndex, distance: $distance, degrees: $degrees, distanceNext: $distanceNext, degreesNext: $degreesNext, distanceCrossPoint: $distanceCrossPoint, latlng: $latlng, activeLatLng: $activeLatLng, isRouteNavigation: $isRouteNavigation, error: $error)';
   }
 
   @override
@@ -293,6 +312,7 @@ class _$_JsonNavigationParams
       ..add(DiagnosticsProperty('degrees', degrees))
       ..add(DiagnosticsProperty('distanceNext', distanceNext))
       ..add(DiagnosticsProperty('degreesNext', degreesNext))
+      ..add(DiagnosticsProperty('distanceCrossPoint', distanceCrossPoint))
       ..add(DiagnosticsProperty('latlng', latlng))
       ..add(DiagnosticsProperty('activeLatLng', activeLatLng))
       ..add(DiagnosticsProperty('isRouteNavigation', isRouteNavigation))
@@ -318,6 +338,9 @@ class _$_JsonNavigationParams
             (identical(other.degreesNext, degreesNext) ||
                 const DeepCollectionEquality()
                     .equals(other.degreesNext, degreesNext)) &&
+            (identical(other.distanceCrossPoint, distanceCrossPoint) ||
+                const DeepCollectionEquality()
+                    .equals(other.distanceCrossPoint, distanceCrossPoint)) &&
             (identical(other.latlng, latlng) ||
                 const DeepCollectionEquality().equals(other.latlng, latlng)) &&
             (identical(other.activeLatLng, activeLatLng) ||
@@ -338,6 +361,7 @@ class _$_JsonNavigationParams
       const DeepCollectionEquality().hash(degrees) ^
       const DeepCollectionEquality().hash(distanceNext) ^
       const DeepCollectionEquality().hash(degreesNext) ^
+      const DeepCollectionEquality().hash(distanceCrossPoint) ^
       const DeepCollectionEquality().hash(latlng) ^
       const DeepCollectionEquality().hash(activeLatLng) ^
       const DeepCollectionEquality().hash(isRouteNavigation) ^
@@ -362,6 +386,7 @@ abstract class _JsonNavigationParams implements JsonNavigationParams {
       double degrees,
       double distanceNext,
       double degreesNext,
+      double distanceCrossPoint,
       List<JsonLatLng> latlng,
       List<bool> activeLatLng,
       bool isRouteNavigation,
@@ -380,6 +405,8 @@ abstract class _JsonNavigationParams implements JsonNavigationParams {
   double get distanceNext => throw _privateConstructorUsedError;
   @override
   double get degreesNext => throw _privateConstructorUsedError;
+  @override
+  double get distanceCrossPoint => throw _privateConstructorUsedError;
   @override
   List<JsonLatLng> get latlng => throw _privateConstructorUsedError;
   @override

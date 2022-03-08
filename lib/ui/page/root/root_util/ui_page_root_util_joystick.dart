@@ -99,6 +99,8 @@ class TouchControlState extends State<TouchControl> {
 
   double _distance = 0;
   double _trun = 0;
+  double _cross = 0;
+  double _sound = 0;
   final List<String> _directionText = [
     'North',
     '	North-northeast',
@@ -243,6 +245,44 @@ class TouchControlState extends State<TouchControl> {
             ),
           ],
         ),
+        Row(
+          children: [
+            const Text('線分の距離'),
+            Expanded(
+              child: Slider(
+                value: _cross,
+                min: 0,
+                max: 1000,
+                divisions: 500,
+                label: _cross.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _cross = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            const Text('音量'),
+            Expanded(
+              child: Slider(
+                value: _sound,
+                min: 0,
+                max: 100,
+                divisions: 100,
+                label: _sound.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _sound = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
         Text('cmd:$_cmd'),
         RaisedButton(
           onPressed: () async {
@@ -254,10 +294,12 @@ class TouchControlState extends State<TouchControl> {
               timer = Timer.periodic(
                 Duration(milliseconds: widget.interval),
                 (Timer t) {
-                  _cmd = tcpComndNaviNew(
+                  _cmd = tcpComndNaviVer2(
                     distance: _distance.toInt(),
                     direction: _degrees.toInt(),
                     turn: _trun.toInt(),
+                    distanceCrossPoint: _cross.toInt(),
+                    sound: _sound.toInt(),
                   );
                   //tcp 送信
                   tcpSend(

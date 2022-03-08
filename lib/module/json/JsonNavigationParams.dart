@@ -16,6 +16,7 @@ abstract class JsonNavigationParams with _$JsonNavigationParams {
     @Default(0) double degrees,
     @Default(0) double distanceNext,
     @Default(0) double degreesNext,
+    @Default(0) double distanceCrossPoint,
     @Default([]) List<JsonLatLng> latlng,
     @Default([]) List<bool> activeLatLng,
     @Default(false) bool isRouteNavigation,

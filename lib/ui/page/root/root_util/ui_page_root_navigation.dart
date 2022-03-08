@@ -29,13 +29,14 @@ class UiPageRootNavigation extends HookConsumerWidget {
   //現在情報
   JsonNavigationParams _now = const JsonNavigationParams();
   //
-
+  int editRouteLenght = 0;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint('--------build in edit');
 
     //各種設定
     var appProvider = ref.watch(apptNotifierProvider);
+    var editRouteProvier = ref.read(editRouteListNotifierProvider);
 
     //現在位置
     var _position = useState(const JsonLatLng());
@@ -124,10 +125,12 @@ class UiPageRootNavigation extends HookConsumerWidget {
                       break;
                     }
                   }
+                  /*
                   //判定が出た場所の以下のポイントは通過済みに変更
                   for (int i = 0; i < _now.naviIndex; i++) {
                     editRouteNotifer.active(i, false);
                   }
+                  */
                   //目標までの距離を計算
                   final di = ((Geolocator.distanceBetween(
                                 position.latitude,
@@ -160,17 +163,18 @@ class UiPageRootNavigation extends HookConsumerWidget {
                   //曲がり角の角度
                   var angle = 0.0;
                   if (editRouteProvier.potisons.length >= index + 2) {
+                    final indexP = index == 0 ? 1 : index;
                     final ba = LatLng(
-                      editRouteProvier.potisons[index].lat -
-                          editRouteProvier.potisons[index - 1].lat,
-                      editRouteProvier.potisons[index].lng -
-                          editRouteProvier.potisons[index - 1].lng,
+                      editRouteProvier.potisons[indexP].lat -
+                          editRouteProvier.potisons[indexP - 1].lat,
+                      editRouteProvier.potisons[indexP].lng -
+                          editRouteProvier.potisons[indexP - 1].lng,
                     );
                     final bc = LatLng(
-                      editRouteProvier.potisons[index].lat -
-                          editRouteProvier.potisons[index + 1].lat,
-                      editRouteProvier.potisons[index].lng -
-                          editRouteProvier.potisons[index + 1].lng,
+                      editRouteProvier.potisons[indexP].lat -
+                          editRouteProvier.potisons[indexP + 1].lat,
+                      editRouteProvier.potisons[indexP].lng -
+                          editRouteProvier.potisons[indexP + 1].lng,
                     );
                     final babc = (ba.latitude * bc.latitude) +
                         (ba.longitude * bc.longitude);
@@ -191,12 +195,23 @@ class UiPageRootNavigation extends HookConsumerWidget {
                       angle = 180 - angle;
                     }
                   }
-
+                  //交点
+                  var crossPont = 0.0;
+                  if (editRouteProvier.potisons.length >= index + 1) {
+                    crossPont = pxDistance(
+                      a: LatLng(editRouteProvier.potisons[index].lat,
+                          editRouteProvier.potisons[index].lng),
+                      b: LatLng(editRouteProvier.potisons[index + 1].lat,
+                          editRouteProvier.potisons[index + 1].lng),
+                      p: LatLng(position.latitude, position.longitude),
+                    );
+                  }
                   //現在地更新
                   _now = _now.copyWith(
                     distance: di,
                     degrees: de,
                     degreesNext: angle,
+                    distanceCrossPoint: crossPont,
                   );
                 }
               }
@@ -210,10 +225,12 @@ class UiPageRootNavigation extends HookConsumerWidget {
     useEffect(() {
       debugPrint('useEffect like initState()');
       location();
+      editRouteLenght = editRouteProvier.potisons.length;
       //送信開始
       intervalTcpSend(
         isActive: true,
         sendDelay: appProvider.interval,
+        sound: appProvider.sound,
       );
       return () {
         //送信停止
@@ -262,6 +279,7 @@ class UiPageRootNavigation extends HookConsumerWidget {
                         Text(
                             '現在位置${_position.value.lat} , ${_position.value.lng}° '),
                         Text('次のポイント${_now.naviIndex}番目'),
+                        Text('ルートまでの距離${_now.distanceCrossPoint}m'),
                       ],
                     ),
                   ),
@@ -276,6 +294,7 @@ class UiPageRootNavigation extends HookConsumerWidget {
   void intervalTcpSend({
     required bool isActive,
     int sendDelay = 1000,
+    int sound = 100,
   }) {
     //送信開始
     if (isActive) {
@@ -288,11 +307,24 @@ class UiPageRootNavigation extends HookConsumerWidget {
           debugPrint('--------送信');
 
           //tcp 送信
+          /*
           tcpSend(
             cmd: tcpComndNaviNew(
               distance: _now.distance.toInt(),
               direction: _now.degrees.toInt(),
               turn: _now.degreesNext.toInt(),
+            ),
+          );
+          */
+          tcpSend(
+            cmd: tcpComndNaviVer2(
+              distance: _now.distance.toInt(),
+              direction: _now.degrees.toInt(),
+              turn: _now.degreesNext.toInt(),
+              index: _now.naviIndex,
+              indexLast: editRouteLenght,
+              distanceCrossPoint: _now.distanceCrossPoint.toInt(),
+              sound: sound,
             ),
           );
         },

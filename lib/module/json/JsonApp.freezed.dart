@@ -24,6 +24,7 @@ class _$JsonAppTearOff {
       [int pageIndex = 0,
       double radius = 10,
       int interval = 1000,
+      int sound = 100,
       String uID = 'test',
       bool isNavigationAcrive = false,
       bool isDebug = true]) {
@@ -31,6 +32,7 @@ class _$JsonAppTearOff {
       pageIndex,
       radius,
       interval,
+      sound,
       uID,
       isNavigationAcrive,
       isDebug,
@@ -50,6 +52,7 @@ mixin _$JsonApp {
   int get pageIndex => throw _privateConstructorUsedError;
   double get radius => throw _privateConstructorUsedError;
   int get interval => throw _privateConstructorUsedError;
+  int get sound => throw _privateConstructorUsedError;
   String get uID => throw _privateConstructorUsedError;
   bool get isNavigationAcrive => throw _privateConstructorUsedError;
   bool get isDebug => throw _privateConstructorUsedError;
@@ -67,6 +70,7 @@ abstract class $JsonAppCopyWith<$Res> {
       {int pageIndex,
       double radius,
       int interval,
+      int sound,
       String uID,
       bool isNavigationAcrive,
       bool isDebug});
@@ -85,6 +89,7 @@ class _$JsonAppCopyWithImpl<$Res> implements $JsonAppCopyWith<$Res> {
     Object? pageIndex = freezed,
     Object? radius = freezed,
     Object? interval = freezed,
+    Object? sound = freezed,
     Object? uID = freezed,
     Object? isNavigationAcrive = freezed,
     Object? isDebug = freezed,
@@ -101,6 +106,10 @@ class _$JsonAppCopyWithImpl<$Res> implements $JsonAppCopyWith<$Res> {
       interval: interval == freezed
           ? _value.interval
           : interval // ignore: cast_nullable_to_non_nullable
+              as int,
+      sound: sound == freezed
+          ? _value.sound
+          : sound // ignore: cast_nullable_to_non_nullable
               as int,
       uID: uID == freezed
           ? _value.uID
@@ -127,6 +136,7 @@ abstract class _$JsonAppCopyWith<$Res> implements $JsonAppCopyWith<$Res> {
       {int pageIndex,
       double radius,
       int interval,
+      int sound,
       String uID,
       bool isNavigationAcrive,
       bool isDebug});
@@ -146,6 +156,7 @@ class __$JsonAppCopyWithImpl<$Res> extends _$JsonAppCopyWithImpl<$Res>
     Object? pageIndex = freezed,
     Object? radius = freezed,
     Object? interval = freezed,
+    Object? sound = freezed,
     Object? uID = freezed,
     Object? isNavigationAcrive = freezed,
     Object? isDebug = freezed,
@@ -162,6 +173,10 @@ class __$JsonAppCopyWithImpl<$Res> extends _$JsonAppCopyWithImpl<$Res>
       interval == freezed
           ? _value.interval
           : interval // ignore: cast_nullable_to_non_nullable
+              as int,
+      sound == freezed
+          ? _value.sound
+          : sound // ignore: cast_nullable_to_non_nullable
               as int,
       uID == freezed
           ? _value.uID
@@ -186,6 +201,7 @@ class _$_JsonApp with DiagnosticableTreeMixin implements _JsonApp {
       [this.pageIndex = 0,
       this.radius = 10,
       this.interval = 1000,
+      this.sound = 100,
       this.uID = 'test',
       this.isNavigationAcrive = false,
       this.isDebug = true]);
@@ -202,6 +218,9 @@ class _$_JsonApp with DiagnosticableTreeMixin implements _JsonApp {
   @JsonKey(defaultValue: 1000)
   @override
   final int interval;
+  @JsonKey(defaultValue: 100)
+  @override
+  final int sound;
   @JsonKey(defaultValue: 'test')
   @override
   final String uID;
@@ -214,7 +233,7 @@ class _$_JsonApp with DiagnosticableTreeMixin implements _JsonApp {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'JsonApp(pageIndex: $pageIndex, radius: $radius, interval: $interval, uID: $uID, isNavigationAcrive: $isNavigationAcrive, isDebug: $isDebug)';
+    return 'JsonApp(pageIndex: $pageIndex, radius: $radius, interval: $interval, sound: $sound, uID: $uID, isNavigationAcrive: $isNavigationAcrive, isDebug: $isDebug)';
   }
 
   @override
@@ -225,6 +244,7 @@ class _$_JsonApp with DiagnosticableTreeMixin implements _JsonApp {
       ..add(DiagnosticsProperty('pageIndex', pageIndex))
       ..add(DiagnosticsProperty('radius', radius))
       ..add(DiagnosticsProperty('interval', interval))
+      ..add(DiagnosticsProperty('sound', sound))
       ..add(DiagnosticsProperty('uID', uID))
       ..add(DiagnosticsProperty('isNavigationAcrive', isNavigationAcrive))
       ..add(DiagnosticsProperty('isDebug', isDebug));
@@ -242,6 +262,8 @@ class _$_JsonApp with DiagnosticableTreeMixin implements _JsonApp {
             (identical(other.interval, interval) ||
                 const DeepCollectionEquality()
                     .equals(other.interval, interval)) &&
+            (identical(other.sound, sound) ||
+                const DeepCollectionEquality().equals(other.sound, sound)) &&
             (identical(other.uID, uID) ||
                 const DeepCollectionEquality().equals(other.uID, uID)) &&
             (identical(other.isNavigationAcrive, isNavigationAcrive) ||
@@ -257,6 +279,7 @@ class _$_JsonApp with DiagnosticableTreeMixin implements _JsonApp {
       const DeepCollectionEquality().hash(pageIndex) ^
       const DeepCollectionEquality().hash(radius) ^
       const DeepCollectionEquality().hash(interval) ^
+      const DeepCollectionEquality().hash(sound) ^
       const DeepCollectionEquality().hash(uID) ^
       const DeepCollectionEquality().hash(isNavigationAcrive) ^
       const DeepCollectionEquality().hash(isDebug);
@@ -277,6 +300,7 @@ abstract class _JsonApp implements JsonApp {
       [int pageIndex,
       double radius,
       int interval,
+      int sound,
       String uID,
       bool isNavigationAcrive,
       bool isDebug]) = _$_JsonApp;
@@ -289,6 +313,8 @@ abstract class _JsonApp implements JsonApp {
   double get radius => throw _privateConstructorUsedError;
   @override
   int get interval => throw _privateConstructorUsedError;
+  @override
+  int get sound => throw _privateConstructorUsedError;
   @override
   String get uID => throw _privateConstructorUsedError;
   @override

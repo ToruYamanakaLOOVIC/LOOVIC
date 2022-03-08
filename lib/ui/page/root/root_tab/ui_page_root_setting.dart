@@ -49,11 +49,6 @@ class UiPageRootSetting extends HookConsumerWidget {
                             hintText: '範囲(m)',
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
-                          keyboardType: const TextInputType.numberWithOptions(
-                              signed: true, decimal: true),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
                           onChanged: (String value) {
                             if (value.isNotEmpty) {
                               final notifier =
@@ -91,11 +86,6 @@ class UiPageRootSetting extends HookConsumerWidget {
                             hintText: '(ms)',
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
-                          keyboardType: const TextInputType.numberWithOptions(
-                              signed: true, decimal: true),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
                           onChanged: (String value) {
                             if (value.isNotEmpty) {
                               final notifier =
@@ -109,6 +99,44 @@ class UiPageRootSetting extends HookConsumerWidget {
                         ),
                       ),
                       const Text('ms'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: const Text('サウンド音量'),
+                trailing: Container(
+                  padding: const EdgeInsets.all(5),
+                  width: 150,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          enabled: true,
+                          textAlign: TextAlign.right,
+                          controller:
+                              TextEditingController(text: '${provider.sound}'),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: '',
+                            hintText: '(%)',
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          onChanged: (String value) {
+                            if (value.isNotEmpty) {
+                              final notifier =
+                                  ref.watch(apptNotifierProvider.notifier);
+                              final sound = int.parse(value);
+
+                              notifier.save(
+                                  app: provider.copyWith(sound: sound));
+                            }
+                          },
+                        ),
+                      ),
+                      const Text('%'),
                     ],
                   ),
                 ),

@@ -13,6 +13,7 @@ abstract class JsonApp with _$JsonApp {
     @Default(0) int pageIndex,
     @Default(10) double radius,
     @Default(1000) int interval,
+    @Default(100) int sound,
     @Default('test') String uID,
     @Default(false) bool isNavigationAcrive,
     @Default(true) bool isDebug,

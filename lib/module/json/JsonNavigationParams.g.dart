@@ -14,6 +14,7 @@ _$_JsonNavigationParams _$_$_JsonNavigationParamsFromJson(
     (json['degrees'] as num?)?.toDouble() ?? 0,
     (json['distanceNext'] as num?)?.toDouble() ?? 0,
     (json['degreesNext'] as num?)?.toDouble() ?? 0,
+    (json['distanceCrossPoint'] as num?)?.toDouble() ?? 0,
     (json['latlng'] as List<dynamic>?)
             ?.map((e) => JsonLatLng.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -33,6 +34,7 @@ Map<String, dynamic> _$_$_JsonNavigationParamsToJson(
       'degrees': instance.degrees,
       'distanceNext': instance.distanceNext,
       'degreesNext': instance.degreesNext,
+      'distanceCrossPoint': instance.distanceCrossPoint,
       'latlng': instance.latlng,
       'activeLatLng': instance.activeLatLng,
       'isRouteNavigation': instance.isRouteNavigation,
