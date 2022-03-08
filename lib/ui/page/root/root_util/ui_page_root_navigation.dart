@@ -143,22 +143,7 @@ class UiPageRootNavigation extends HookConsumerWidget {
                           .toDouble()) /
                       10;
                   //目標までの方位を計算
-                  final de = (((((Geolocator.bearingBetween(
-                                            position.latitude,
-                                            position.longitude,
-                                            editRouteProvier
-                                                .potisons[index].lat,
-                                            editRouteProvier
-                                                .potisons[index].lng,
-                                          ) *
-                                          10)
-                                      .round()
-                                      .toDouble()) /
-                                  10) +
-                              720) %
-                          360)
-                      .round()
-                      .toDouble();
+                  var de = 0.0;
 
                   //曲がり角の角度
                   var angle = 0.0;
@@ -205,6 +190,25 @@ class UiPageRootNavigation extends HookConsumerWidget {
                           editRouteProvier.potisons[index + 1].lng),
                       p: LatLng(position.latitude, position.longitude),
                     );
+
+                    de = (((((Geolocator.bearingBetween(
+                                              editRouteProvier
+                                                  .potisons[index].lat,
+                                              editRouteProvier
+                                                  .potisons[index].lng,
+                                              editRouteProvier
+                                                  .potisons[index + 1].lat,
+                                              editRouteProvier
+                                                  .potisons[index + 1].lng,
+                                            ) *
+                                            10)
+                                        .round()
+                                        .toDouble()) /
+                                    10) +
+                                720) %
+                            360)
+                        .round()
+                        .toDouble();
                   }
                   //現在地更新
                   _now = _now.copyWith(
