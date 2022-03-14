@@ -295,10 +295,10 @@ class TouchControlState extends State<TouchControl> {
                 Duration(milliseconds: widget.interval),
                 (Timer t) {
                   _cmd = tcpComndNaviVer2(
-                    distance: _distance.toInt(),
-                    direction: _degrees.toInt(),
-                    turn: _trun.toInt(),
-                    distanceCrossPoint: _cross.toInt(),
+                    distanceNextPoint: _distance.toInt(),
+                    degreesNextPoint: _degrees.toInt(),
+                    angleNextLine: _trun.toInt(),
+                    distanceL2CrossPoint: _cross.toInt(),
                     sound: _sound.toInt(),
                   );
                   //tcp 送信

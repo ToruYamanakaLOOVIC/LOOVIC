@@ -22,22 +22,26 @@ class _$JsonNavigationParamsTearOff {
 
   _JsonNavigationParams call(
       [int naviIndex = 0,
-      double distance = 0,
-      double degrees = 0,
-      double distanceNext = 0,
-      double degreesNext = 0,
-      double distanceCrossPoint = 0,
+      double distanceNextPoint = 0,
+      double degreesNextPoint = 0,
+      double angleNextLine = 0,
+      double distanceL2CrossPoint = 0,
+      double degreesL2CrossPoint = 0,
+      double distanceL1CrossPoint = 0,
+      double degreesL1CrossPoint = 0,
       List<JsonLatLng> latlng = const [],
       List<bool> activeLatLng = const [],
       bool isRouteNavigation = false,
       bool error = false]) {
     return _JsonNavigationParams(
       naviIndex,
-      distance,
-      degrees,
-      distanceNext,
-      degreesNext,
-      distanceCrossPoint,
+      distanceNextPoint,
+      degreesNextPoint,
+      angleNextLine,
+      distanceL2CrossPoint,
+      degreesL2CrossPoint,
+      distanceL1CrossPoint,
+      degreesL1CrossPoint,
       latlng,
       activeLatLng,
       isRouteNavigation,
@@ -56,11 +60,13 @@ const $JsonNavigationParams = _$JsonNavigationParamsTearOff();
 /// @nodoc
 mixin _$JsonNavigationParams {
   int get naviIndex => throw _privateConstructorUsedError;
-  double get distance => throw _privateConstructorUsedError;
-  double get degrees => throw _privateConstructorUsedError;
-  double get distanceNext => throw _privateConstructorUsedError;
-  double get degreesNext => throw _privateConstructorUsedError;
-  double get distanceCrossPoint => throw _privateConstructorUsedError;
+  double get distanceNextPoint => throw _privateConstructorUsedError;
+  double get degreesNextPoint => throw _privateConstructorUsedError;
+  double get angleNextLine => throw _privateConstructorUsedError;
+  double get distanceL2CrossPoint => throw _privateConstructorUsedError;
+  double get degreesL2CrossPoint => throw _privateConstructorUsedError;
+  double get distanceL1CrossPoint => throw _privateConstructorUsedError;
+  double get degreesL1CrossPoint => throw _privateConstructorUsedError;
   List<JsonLatLng> get latlng => throw _privateConstructorUsedError;
   List<bool> get activeLatLng => throw _privateConstructorUsedError;
   bool get isRouteNavigation => throw _privateConstructorUsedError;
@@ -79,11 +85,13 @@ abstract class $JsonNavigationParamsCopyWith<$Res> {
       _$JsonNavigationParamsCopyWithImpl<$Res>;
   $Res call(
       {int naviIndex,
-      double distance,
-      double degrees,
-      double distanceNext,
-      double degreesNext,
-      double distanceCrossPoint,
+      double distanceNextPoint,
+      double degreesNextPoint,
+      double angleNextLine,
+      double distanceL2CrossPoint,
+      double degreesL2CrossPoint,
+      double distanceL1CrossPoint,
+      double degreesL1CrossPoint,
       List<JsonLatLng> latlng,
       List<bool> activeLatLng,
       bool isRouteNavigation,
@@ -102,11 +110,13 @@ class _$JsonNavigationParamsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? naviIndex = freezed,
-    Object? distance = freezed,
-    Object? degrees = freezed,
-    Object? distanceNext = freezed,
-    Object? degreesNext = freezed,
-    Object? distanceCrossPoint = freezed,
+    Object? distanceNextPoint = freezed,
+    Object? degreesNextPoint = freezed,
+    Object? angleNextLine = freezed,
+    Object? distanceL2CrossPoint = freezed,
+    Object? degreesL2CrossPoint = freezed,
+    Object? distanceL1CrossPoint = freezed,
+    Object? degreesL1CrossPoint = freezed,
     Object? latlng = freezed,
     Object? activeLatLng = freezed,
     Object? isRouteNavigation = freezed,
@@ -117,25 +127,33 @@ class _$JsonNavigationParamsCopyWithImpl<$Res>
           ? _value.naviIndex
           : naviIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      distance: distance == freezed
-          ? _value.distance
-          : distance // ignore: cast_nullable_to_non_nullable
+      distanceNextPoint: distanceNextPoint == freezed
+          ? _value.distanceNextPoint
+          : distanceNextPoint // ignore: cast_nullable_to_non_nullable
               as double,
-      degrees: degrees == freezed
-          ? _value.degrees
-          : degrees // ignore: cast_nullable_to_non_nullable
+      degreesNextPoint: degreesNextPoint == freezed
+          ? _value.degreesNextPoint
+          : degreesNextPoint // ignore: cast_nullable_to_non_nullable
               as double,
-      distanceNext: distanceNext == freezed
-          ? _value.distanceNext
-          : distanceNext // ignore: cast_nullable_to_non_nullable
+      angleNextLine: angleNextLine == freezed
+          ? _value.angleNextLine
+          : angleNextLine // ignore: cast_nullable_to_non_nullable
               as double,
-      degreesNext: degreesNext == freezed
-          ? _value.degreesNext
-          : degreesNext // ignore: cast_nullable_to_non_nullable
+      distanceL2CrossPoint: distanceL2CrossPoint == freezed
+          ? _value.distanceL2CrossPoint
+          : distanceL2CrossPoint // ignore: cast_nullable_to_non_nullable
               as double,
-      distanceCrossPoint: distanceCrossPoint == freezed
-          ? _value.distanceCrossPoint
-          : distanceCrossPoint // ignore: cast_nullable_to_non_nullable
+      degreesL2CrossPoint: degreesL2CrossPoint == freezed
+          ? _value.degreesL2CrossPoint
+          : degreesL2CrossPoint // ignore: cast_nullable_to_non_nullable
+              as double,
+      distanceL1CrossPoint: distanceL1CrossPoint == freezed
+          ? _value.distanceL1CrossPoint
+          : distanceL1CrossPoint // ignore: cast_nullable_to_non_nullable
+              as double,
+      degreesL1CrossPoint: degreesL1CrossPoint == freezed
+          ? _value.degreesL1CrossPoint
+          : degreesL1CrossPoint // ignore: cast_nullable_to_non_nullable
               as double,
       latlng: latlng == freezed
           ? _value.latlng
@@ -166,11 +184,13 @@ abstract class _$JsonNavigationParamsCopyWith<$Res>
   @override
   $Res call(
       {int naviIndex,
-      double distance,
-      double degrees,
-      double distanceNext,
-      double degreesNext,
-      double distanceCrossPoint,
+      double distanceNextPoint,
+      double degreesNextPoint,
+      double angleNextLine,
+      double distanceL2CrossPoint,
+      double degreesL2CrossPoint,
+      double distanceL1CrossPoint,
+      double degreesL1CrossPoint,
       List<JsonLatLng> latlng,
       List<bool> activeLatLng,
       bool isRouteNavigation,
@@ -191,11 +211,13 @@ class __$JsonNavigationParamsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? naviIndex = freezed,
-    Object? distance = freezed,
-    Object? degrees = freezed,
-    Object? distanceNext = freezed,
-    Object? degreesNext = freezed,
-    Object? distanceCrossPoint = freezed,
+    Object? distanceNextPoint = freezed,
+    Object? degreesNextPoint = freezed,
+    Object? angleNextLine = freezed,
+    Object? distanceL2CrossPoint = freezed,
+    Object? degreesL2CrossPoint = freezed,
+    Object? distanceL1CrossPoint = freezed,
+    Object? degreesL1CrossPoint = freezed,
     Object? latlng = freezed,
     Object? activeLatLng = freezed,
     Object? isRouteNavigation = freezed,
@@ -206,25 +228,33 @@ class __$JsonNavigationParamsCopyWithImpl<$Res>
           ? _value.naviIndex
           : naviIndex // ignore: cast_nullable_to_non_nullable
               as int,
-      distance == freezed
-          ? _value.distance
-          : distance // ignore: cast_nullable_to_non_nullable
+      distanceNextPoint == freezed
+          ? _value.distanceNextPoint
+          : distanceNextPoint // ignore: cast_nullable_to_non_nullable
               as double,
-      degrees == freezed
-          ? _value.degrees
-          : degrees // ignore: cast_nullable_to_non_nullable
+      degreesNextPoint == freezed
+          ? _value.degreesNextPoint
+          : degreesNextPoint // ignore: cast_nullable_to_non_nullable
               as double,
-      distanceNext == freezed
-          ? _value.distanceNext
-          : distanceNext // ignore: cast_nullable_to_non_nullable
+      angleNextLine == freezed
+          ? _value.angleNextLine
+          : angleNextLine // ignore: cast_nullable_to_non_nullable
               as double,
-      degreesNext == freezed
-          ? _value.degreesNext
-          : degreesNext // ignore: cast_nullable_to_non_nullable
+      distanceL2CrossPoint == freezed
+          ? _value.distanceL2CrossPoint
+          : distanceL2CrossPoint // ignore: cast_nullable_to_non_nullable
               as double,
-      distanceCrossPoint == freezed
-          ? _value.distanceCrossPoint
-          : distanceCrossPoint // ignore: cast_nullable_to_non_nullable
+      degreesL2CrossPoint == freezed
+          ? _value.degreesL2CrossPoint
+          : degreesL2CrossPoint // ignore: cast_nullable_to_non_nullable
+              as double,
+      distanceL1CrossPoint == freezed
+          ? _value.distanceL1CrossPoint
+          : distanceL1CrossPoint // ignore: cast_nullable_to_non_nullable
+              as double,
+      degreesL1CrossPoint == freezed
+          ? _value.degreesL1CrossPoint
+          : degreesL1CrossPoint // ignore: cast_nullable_to_non_nullable
               as double,
       latlng == freezed
           ? _value.latlng
@@ -253,11 +283,13 @@ class _$_JsonNavigationParams
     implements _JsonNavigationParams {
   const _$_JsonNavigationParams(
       [this.naviIndex = 0,
-      this.distance = 0,
-      this.degrees = 0,
-      this.distanceNext = 0,
-      this.degreesNext = 0,
-      this.distanceCrossPoint = 0,
+      this.distanceNextPoint = 0,
+      this.degreesNextPoint = 0,
+      this.angleNextLine = 0,
+      this.distanceL2CrossPoint = 0,
+      this.degreesL2CrossPoint = 0,
+      this.distanceL1CrossPoint = 0,
+      this.degreesL1CrossPoint = 0,
       this.latlng = const [],
       this.activeLatLng = const [],
       this.isRouteNavigation = false,
@@ -271,19 +303,25 @@ class _$_JsonNavigationParams
   final int naviIndex;
   @JsonKey(defaultValue: 0)
   @override
-  final double distance;
+  final double distanceNextPoint;
   @JsonKey(defaultValue: 0)
   @override
-  final double degrees;
+  final double degreesNextPoint;
   @JsonKey(defaultValue: 0)
   @override
-  final double distanceNext;
+  final double angleNextLine;
   @JsonKey(defaultValue: 0)
   @override
-  final double degreesNext;
+  final double distanceL2CrossPoint;
   @JsonKey(defaultValue: 0)
   @override
-  final double distanceCrossPoint;
+  final double degreesL2CrossPoint;
+  @JsonKey(defaultValue: 0)
+  @override
+  final double distanceL1CrossPoint;
+  @JsonKey(defaultValue: 0)
+  @override
+  final double degreesL1CrossPoint;
   @JsonKey(defaultValue: const [])
   @override
   final List<JsonLatLng> latlng;
@@ -299,7 +337,7 @@ class _$_JsonNavigationParams
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'JsonNavigationParams(naviIndex: $naviIndex, distance: $distance, degrees: $degrees, distanceNext: $distanceNext, degreesNext: $degreesNext, distanceCrossPoint: $distanceCrossPoint, latlng: $latlng, activeLatLng: $activeLatLng, isRouteNavigation: $isRouteNavigation, error: $error)';
+    return 'JsonNavigationParams(naviIndex: $naviIndex, distanceNextPoint: $distanceNextPoint, degreesNextPoint: $degreesNextPoint, angleNextLine: $angleNextLine, distanceL2CrossPoint: $distanceL2CrossPoint, degreesL2CrossPoint: $degreesL2CrossPoint, distanceL1CrossPoint: $distanceL1CrossPoint, degreesL1CrossPoint: $degreesL1CrossPoint, latlng: $latlng, activeLatLng: $activeLatLng, isRouteNavigation: $isRouteNavigation, error: $error)';
   }
 
   @override
@@ -308,11 +346,13 @@ class _$_JsonNavigationParams
     properties
       ..add(DiagnosticsProperty('type', 'JsonNavigationParams'))
       ..add(DiagnosticsProperty('naviIndex', naviIndex))
-      ..add(DiagnosticsProperty('distance', distance))
-      ..add(DiagnosticsProperty('degrees', degrees))
-      ..add(DiagnosticsProperty('distanceNext', distanceNext))
-      ..add(DiagnosticsProperty('degreesNext', degreesNext))
-      ..add(DiagnosticsProperty('distanceCrossPoint', distanceCrossPoint))
+      ..add(DiagnosticsProperty('distanceNextPoint', distanceNextPoint))
+      ..add(DiagnosticsProperty('degreesNextPoint', degreesNextPoint))
+      ..add(DiagnosticsProperty('angleNextLine', angleNextLine))
+      ..add(DiagnosticsProperty('distanceL2CrossPoint', distanceL2CrossPoint))
+      ..add(DiagnosticsProperty('degreesL2CrossPoint', degreesL2CrossPoint))
+      ..add(DiagnosticsProperty('distanceL1CrossPoint', distanceL1CrossPoint))
+      ..add(DiagnosticsProperty('degreesL1CrossPoint', degreesL1CrossPoint))
       ..add(DiagnosticsProperty('latlng', latlng))
       ..add(DiagnosticsProperty('activeLatLng', activeLatLng))
       ..add(DiagnosticsProperty('isRouteNavigation', isRouteNavigation))
@@ -326,21 +366,27 @@ class _$_JsonNavigationParams
             (identical(other.naviIndex, naviIndex) ||
                 const DeepCollectionEquality()
                     .equals(other.naviIndex, naviIndex)) &&
-            (identical(other.distance, distance) ||
+            (identical(other.distanceNextPoint, distanceNextPoint) ||
                 const DeepCollectionEquality()
-                    .equals(other.distance, distance)) &&
-            (identical(other.degrees, degrees) ||
+                    .equals(other.distanceNextPoint, distanceNextPoint)) &&
+            (identical(other.degreesNextPoint, degreesNextPoint) ||
                 const DeepCollectionEquality()
-                    .equals(other.degrees, degrees)) &&
-            (identical(other.distanceNext, distanceNext) ||
+                    .equals(other.degreesNextPoint, degreesNextPoint)) &&
+            (identical(other.angleNextLine, angleNextLine) ||
                 const DeepCollectionEquality()
-                    .equals(other.distanceNext, distanceNext)) &&
-            (identical(other.degreesNext, degreesNext) ||
+                    .equals(other.angleNextLine, angleNextLine)) &&
+            (identical(other.distanceL2CrossPoint, distanceL2CrossPoint) ||
+                const DeepCollectionEquality().equals(
+                    other.distanceL2CrossPoint, distanceL2CrossPoint)) &&
+            (identical(other.degreesL2CrossPoint, degreesL2CrossPoint) ||
                 const DeepCollectionEquality()
-                    .equals(other.degreesNext, degreesNext)) &&
-            (identical(other.distanceCrossPoint, distanceCrossPoint) ||
+                    .equals(other.degreesL2CrossPoint, degreesL2CrossPoint)) &&
+            (identical(other.distanceL1CrossPoint, distanceL1CrossPoint) ||
+                const DeepCollectionEquality().equals(
+                    other.distanceL1CrossPoint, distanceL1CrossPoint)) &&
+            (identical(other.degreesL1CrossPoint, degreesL1CrossPoint) ||
                 const DeepCollectionEquality()
-                    .equals(other.distanceCrossPoint, distanceCrossPoint)) &&
+                    .equals(other.degreesL1CrossPoint, degreesL1CrossPoint)) &&
             (identical(other.latlng, latlng) ||
                 const DeepCollectionEquality().equals(other.latlng, latlng)) &&
             (identical(other.activeLatLng, activeLatLng) ||
@@ -357,11 +403,13 @@ class _$_JsonNavigationParams
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(naviIndex) ^
-      const DeepCollectionEquality().hash(distance) ^
-      const DeepCollectionEquality().hash(degrees) ^
-      const DeepCollectionEquality().hash(distanceNext) ^
-      const DeepCollectionEquality().hash(degreesNext) ^
-      const DeepCollectionEquality().hash(distanceCrossPoint) ^
+      const DeepCollectionEquality().hash(distanceNextPoint) ^
+      const DeepCollectionEquality().hash(degreesNextPoint) ^
+      const DeepCollectionEquality().hash(angleNextLine) ^
+      const DeepCollectionEquality().hash(distanceL2CrossPoint) ^
+      const DeepCollectionEquality().hash(degreesL2CrossPoint) ^
+      const DeepCollectionEquality().hash(distanceL1CrossPoint) ^
+      const DeepCollectionEquality().hash(degreesL1CrossPoint) ^
       const DeepCollectionEquality().hash(latlng) ^
       const DeepCollectionEquality().hash(activeLatLng) ^
       const DeepCollectionEquality().hash(isRouteNavigation) ^
@@ -382,11 +430,13 @@ class _$_JsonNavigationParams
 abstract class _JsonNavigationParams implements JsonNavigationParams {
   const factory _JsonNavigationParams(
       [int naviIndex,
-      double distance,
-      double degrees,
-      double distanceNext,
-      double degreesNext,
-      double distanceCrossPoint,
+      double distanceNextPoint,
+      double degreesNextPoint,
+      double angleNextLine,
+      double distanceL2CrossPoint,
+      double degreesL2CrossPoint,
+      double distanceL1CrossPoint,
+      double degreesL1CrossPoint,
       List<JsonLatLng> latlng,
       List<bool> activeLatLng,
       bool isRouteNavigation,
@@ -398,15 +448,19 @@ abstract class _JsonNavigationParams implements JsonNavigationParams {
   @override
   int get naviIndex => throw _privateConstructorUsedError;
   @override
-  double get distance => throw _privateConstructorUsedError;
+  double get distanceNextPoint => throw _privateConstructorUsedError;
   @override
-  double get degrees => throw _privateConstructorUsedError;
+  double get degreesNextPoint => throw _privateConstructorUsedError;
   @override
-  double get distanceNext => throw _privateConstructorUsedError;
+  double get angleNextLine => throw _privateConstructorUsedError;
   @override
-  double get degreesNext => throw _privateConstructorUsedError;
+  double get distanceL2CrossPoint => throw _privateConstructorUsedError;
   @override
-  double get distanceCrossPoint => throw _privateConstructorUsedError;
+  double get degreesL2CrossPoint => throw _privateConstructorUsedError;
+  @override
+  double get distanceL1CrossPoint => throw _privateConstructorUsedError;
+  @override
+  double get degreesL1CrossPoint => throw _privateConstructorUsedError;
   @override
   List<JsonLatLng> get latlng => throw _privateConstructorUsedError;
   @override

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:loovic/module/json/JsonNavigationParams.dart';
@@ -37,7 +36,7 @@ class UiPageRootNavigation extends HookConsumerWidget {
     //各種設定
     var appProvider = ref.watch(apptNotifierProvider);
     var editRouteProvier = ref.read(editRouteListNotifierProvider);
-
+    var editRouteNotifer = ref.read(editRouteListNotifierProvider.notifier);
     //現在位置
     var _position = useState(const JsonLatLng());
     //
@@ -57,40 +56,112 @@ class UiPageRootNavigation extends HookConsumerWidget {
         ).listen(
           // ignore: void_checks
           (position) async {
-            //緯度経度が入っている　0,0じゃない
-            if (position.latitude != 0.0 && position.longitude != 0.0) {
-              //前回との距離
-              final distance = ((Geolocator.distanceBetween(
-                            position.latitude,
-                            position.longitude,
-                            _position.value.lat,
-                            _position.value.lng,
-                          ) *
-                          10)
-                      .round()
-                      .toDouble()) /
-                  10;
-
-              if (distance > 1) {
-                var editRouteProvier = ref.read(editRouteListNotifierProvider);
-                var editRouteNotifer =
-                    ref.read(editRouteListNotifierProvider.notifier);
-
-                //緯度経度を表示
-                debugPrint('$position');
-                //
+            //前回との距離
+            final distance = ((Geolocator.distanceBetween(
+                          position.latitude,
+                          position.longitude,
+                          _position.value.lat,
+                          _position.value.lng,
+                        ) *
+                        10)
+                    .round()
+                    .toDouble()) /
+                10;
+            //１m以上移動している
+            if (distance > 1 &&
+                //緯度経度が入っている　0,0じゃない
+                position.latitude != 0.0 &&
+                position.longitude != 0.0 &&
+                //ポイントが設定されている
+                editRouteProvier.potisons.isNotEmpty) {
+              if (editRouteProvier.potisons.length > 2) {
+                //保温位置更新
                 _position.value = JsonLatLng(
                   position.latitude,
                   position.longitude,
                 );
-                //位置の保存
-                final notifier =
-                    ref.read(routeLogsListNotifierProvider.notifier);
-                await notifier.add(_position.value);
+                //案内ポイント index
+                var indexPoint = _now.naviIndex;
 
-                if (editRouteProvier.potisons.isNotEmpty) {
-                  var index = _now.naviIndex;
+                //当たり判定(目標の１ポイント)
+                //まだ通っていない場合
+                if (editRouteProvier.potisons[indexPoint].acrive) {
+                  final i = editRouteProvier.potisons
+                      .indexOf(editRouteProvier.potisons[indexPoint]);
+                  final distance = ((Geolocator.distanceBetween(
+                                position.latitude,
+                                position.longitude,
+                                editRouteProvier.potisons[indexPoint].lat,
+                                editRouteProvier.potisons[indexPoint].lng,
+                              ) *
+                              10)
+                          .round()
+                          .toDouble()) /
+                      10;
+                  final radius = appProvider.radius * 2;
+                  //ポイントまで設定距離を切った時の判定
+                  if (distance < radius) {
+                    editRouteNotifer.active(i, false);
+                    //目標を次のポイントに設定
+                    indexPoint++;
+                  }
+                }
+                if (indexPoint >= editRouteProvier.potisons.length - 1) {
+                  return;
+                }
+                //緯度経度を表示
+                debugPrint('$position');
 
+                //現在地
+                final p0 = LatLng(position.latitude, position.longitude);
+                //一つ前の案内ポイント
+                final indexP1 = indexPoint == 0 ? 0 : indexPoint - 1;
+                final p1 = LatLng(
+                  editRouteProvier.potisons[indexP1].lat,
+                  editRouteProvier.potisons[indexP1].lng,
+                );
+                //目標ポイント
+                final indexP2 = indexP1 == 0 ? 1 : indexPoint;
+                final p2 = LatLng(
+                  editRouteProvier.potisons[indexP2].lat,
+                  editRouteProvier.potisons[indexP2].lng,
+                );
+                //先のポイント目標ポイント
+                final indexP3 = editRouteProvier.potisons.length - 1 > indexP2
+                    ? indexP2 + 1
+                    : editRouteProvier.potisons.length - 1;
+                final p3 = LatLng(
+                  editRouteProvier.potisons[indexP3].lat,
+                  editRouteProvier.potisons[indexP3].lng,
+                );
+
+                //目標までの距離を計算(p0 -> p2)
+                final distanceNextPoint = ((Geolocator.distanceBetween(
+                              p0.latitude,
+                              p0.longitude,
+                              p2.latitude,
+                              p2.longitude,
+                            ) *
+                            10)
+                        .round()
+                        .toDouble()) /
+                    10;
+                //目標までの方位を計算(p0 -> p2)
+                final degreesNextPoint = (((((Geolocator.bearingBetween(
+                                          p0.latitude,
+                                          p0.longitude,
+                                          p2.latitude,
+                                          p2.longitude,
+                                        ) *
+                                        10)
+                                    .round()
+                                    .toDouble()) /
+                                10) +
+                            720) %
+                        360)
+                    .round()
+                    .toDouble();
+                /*
                   //当たり判定
                   for (var point in editRouteProvier.potisons) {
                     //まだ通っていない場合
@@ -113,111 +184,131 @@ class UiPageRootNavigation extends HookConsumerWidget {
                       }
                     }
                   }
-                  //次のナビゲーション位置を更新
-                  for (int i = editRouteProvier.potisons.length - 1;
-                      i >= 0;
-                      i--) {
-                    //
-                    if (!editRouteProvier.potisons[i].acrive) {
-                      index = i + 1;
-                      //目標を次のポイントに設定
-                      _now = _now.copyWith(naviIndex: index);
-                      break;
-                    }
-                  }
-                  /*
-                  //判定が出た場所の以下のポイントは通過済みに変更
-                  for (int i = 0; i < _now.naviIndex; i++) {
-                    editRouteNotifer.active(i, false);
-                  }
                   */
-                  //目標までの距離を計算
-                  final di = ((Geolocator.distanceBetween(
-                                position.latitude,
-                                position.longitude,
-                                editRouteProvier.potisons[index].lat,
-                                editRouteProvier.potisons[index].lng,
-                              ) *
-                              10)
-                          .round()
-                          .toDouble()) /
-                      10;
-                  //目標までの方位を計算
-                  var de = 0.0;
 
-                  //曲がり角の角度
-                  var angle = 0.0;
-                  if (editRouteProvier.potisons.length >= index + 2) {
-                    final indexP = index == 0 ? 1 : index;
-                    final ba = LatLng(
-                      editRouteProvier.potisons[indexP].lat -
-                          editRouteProvier.potisons[indexP - 1].lat,
-                      editRouteProvier.potisons[indexP].lng -
-                          editRouteProvier.potisons[indexP - 1].lng,
-                    );
-                    final bc = LatLng(
-                      editRouteProvier.potisons[indexP].lat -
-                          editRouteProvier.potisons[indexP + 1].lat,
-                      editRouteProvier.potisons[indexP].lng -
-                          editRouteProvier.potisons[indexP + 1].lng,
-                    );
-                    final babc = (ba.latitude * bc.latitude) +
-                        (ba.longitude * bc.longitude);
-                    final ban = (ba.latitude * ba.latitude) +
-                        (ba.longitude * ba.longitude);
-                    final bcn = (bc.latitude * bc.latitude) +
-                        (bc.longitude * bc.longitude);
-                    final radian = acos(babc / sqrt((ban * bcn)));
-                    angle = radian * 180 / pi;
-
-                    //外積
-                    final ab = (ba.latitude * bc.longitude) -
-                        (ba.longitude * bc.latitude);
-
-                    if (ab > 0) {
-                      angle = 360 + (angle - 180);
-                    } else {
-                      angle = 180 - angle;
-                    }
-                  }
-                  //交点
-                  var crossPont = 0.0;
-                  if (editRouteProvier.potisons.length >= index + 1) {
-                    crossPont = pxDistance(
-                      a: LatLng(editRouteProvier.potisons[index].lat,
-                          editRouteProvier.potisons[index].lng),
-                      b: LatLng(editRouteProvier.potisons[index + 1].lat,
-                          editRouteProvier.potisons[index + 1].lng),
-                      p: LatLng(position.latitude, position.longitude),
-                    );
-
-                    de = (((((Geolocator.bearingBetween(
-                                              editRouteProvier
-                                                  .potisons[index].lat,
-                                              editRouteProvier
-                                                  .potisons[index].lng,
-                                              editRouteProvier
-                                                  .potisons[index + 1].lat,
-                                              editRouteProvier
-                                                  .potisons[index + 1].lng,
-                                            ) *
-                                            10)
-                                        .round()
-                                        .toDouble()) /
-                                    10) +
-                                720) %
-                            360)
+                //交点に対する距離(p2 -> p3 の線分に対するp0の交点)
+                final l1CrossPoint = pLCrossPoint(
+                  a: p2,
+                  b: p3,
+                  p: p0,
+                );
+                //交点に対する距離(p2 -> p3 の線分に対するp0の交点)
+                final distanceL1CrossPoint = ((Geolocator.distanceBetween(
+                              p0.latitude,
+                              p0.longitude,
+                              l1CrossPoint.latitude,
+                              l1CrossPoint.longitude,
+                            ) *
+                            10)
                         .round()
-                        .toDouble();
-                  }
-                  //現在地更新
-                  _now = _now.copyWith(
-                    distance: di,
-                    degrees: de,
-                    degreesNext: angle,
-                    distanceCrossPoint: crossPont,
+                        .toDouble()) /
+                    10;
+                //交点に対する方位(p2 -> p3 の線分に対するp0の交点)
+                final degreesL1CrossPoint = (((((Geolocator.bearingBetween(
+                                          p0.latitude,
+                                          p0.longitude,
+                                          l1CrossPoint.latitude,
+                                          l1CrossPoint.longitude,
+                                        ) *
+                                        10)
+                                    .round()
+                                    .toDouble()) /
+                                10) +
+                            720) %
+                        360)
+                    .round()
+                    .toDouble();
+
+                //曲がり角の角度(p2 -> p3 の線分L1の角度)
+                var angleL1 = 0.0;
+                if (p1 == p2 && p2 == p3) {
+                  angleL1 = 0;
+                } else if (p2 == p3) {
+                  angleL1 = 0;
+                } else if (p1 == p2) {
+                  var a = 0;
+                  angleL1 = lineAngle(
+                    p1: LatLng(
+                      editRouteProvier.potisons[0].lat,
+                      editRouteProvier.potisons[0].lng,
+                    ),
+                    p2: LatLng(
+                      editRouteProvier.potisons[1].lat,
+                      editRouteProvier.potisons[1].lng,
+                    ),
+                    p3: LatLng(
+                      editRouteProvier.potisons[2].lat,
+                      editRouteProvier.potisons[2].lng,
+                    ),
+                  );
+                } else {
+                  angleL1 = lineAngle(
+                    p1: p1,
+                    p2: p2,
+                    p3: p3,
                   );
                 }
+
+                //L2の方位(p1 -> p2)
+                final l2degrees = (((((Geolocator.bearingBetween(
+                                          p1.latitude,
+                                          p1.longitude,
+                                          p2.latitude,
+                                          p2.longitude,
+                                        ) *
+                                        10)
+                                    .round()
+                                    .toDouble()) /
+                                10) +
+                            720) %
+                        360)
+                    .round()
+                    .toDouble();
+
+                //交点に対する距離(p1 -> p2 の線分に対するp0の交点)
+                final l2CrossPoint = pLCrossPoint(
+                  a: p1,
+                  b: p2,
+                  p: p0,
+                );
+                //交点に対する距離(p1 -> p2 の線分に対するp0の交点)
+                final distanceL2CrossPoint = ((Geolocator.distanceBetween(
+                              p0.latitude,
+                              p0.longitude,
+                              l2CrossPoint.latitude,
+                              l2CrossPoint.longitude,
+                            ) *
+                            10)
+                        .round()
+                        .toDouble()) /
+                    10;
+                //交点に対する方位(p1 -> p2 の線分に対するp0の交点)
+                final degreesL2CrossPoint = (((((Geolocator.bearingBetween(
+                                          p0.latitude,
+                                          p0.longitude,
+                                          l2CrossPoint.latitude,
+                                          l2CrossPoint.longitude,
+                                        ) *
+                                        10)
+                                    .round()
+                                    .toDouble()) /
+                                10) +
+                            720) %
+                        360)
+                    .round()
+                    .toDouble();
+
+                //現在地更新
+                _now = _now.copyWith(
+                  naviIndex: indexPoint,
+                  distanceNextPoint: distanceNextPoint,
+                  degreesNextPoint: degreesNextPoint,
+                  degreesL1CrossPoint: degreesL1CrossPoint,
+                  distanceL1CrossPoint: distanceL1CrossPoint,
+                  degreesL2CrossPoint: degreesL2CrossPoint,
+                  distanceL2CrossPoint: distanceL2CrossPoint,
+                  angleNextLine: angleL1,
+                );
               }
             }
           },
@@ -277,13 +368,16 @@ class UiPageRootNavigation extends HookConsumerWidget {
                   child: FittedBox(
                     child: Column(
                       children: [
-                        Text('次のポイントまで${_now.distance}m '),
-                        Text('方角${_now.degrees}° '),
-                        Text('曲がり角の角度${_now.degreesNext}°'),
                         Text(
                             '現在位置${_position.value.lat} , ${_position.value.lng}° '),
                         Text('次のポイント${_now.naviIndex}番目'),
-                        Text('ルートまでの距離${_now.distanceCrossPoint}m'),
+                        Text('次のポイントまで${_now.distanceNextPoint}m '),
+                        Text('次のポイント方位${_now.degreesNextPoint}° '),
+                        Text('曲がり角の角度${_now.angleNextLine}°'),
+                        Text('L1までの距離${_now.distanceL1CrossPoint}m'),
+                        Text('L1までの方位${_now.degreesL1CrossPoint}°'),
+                        Text('L2までの距離${_now.distanceL2CrossPoint}m'),
+                        Text('L2までの方位${_now.degreesL2CrossPoint}°'),
                       ],
                     ),
                   ),
@@ -309,25 +403,18 @@ class UiPageRootNavigation extends HookConsumerWidget {
         Duration(milliseconds: sendDelay),
         (Timer t) {
           debugPrint('--------送信');
-
-          //tcp 送信
-          /*
-          tcpSend(
-            cmd: tcpComndNaviNew(
-              distance: _now.distance.toInt(),
-              direction: _now.degrees.toInt(),
-              turn: _now.degreesNext.toInt(),
-            ),
-          );
-          */
+          var a = 0;
           tcpSend(
             cmd: tcpComndNaviVer2(
-              distance: _now.distance.toInt(),
-              direction: _now.degrees.toInt(),
-              turn: _now.degreesNext.toInt(),
+              distanceNextPoint: _now.distanceNextPoint.toInt(),
+              degreesNextPoint: _now.degreesNextPoint.toInt(),
+              angleNextLine: _now.angleNextLine.toInt(),
               index: _now.naviIndex,
               indexLast: editRouteLenght,
-              distanceCrossPoint: _now.distanceCrossPoint.toInt(),
+              distanceL1CrossPoint: _now.distanceL1CrossPoint.toInt(),
+              degreesL1CrossPoint: _now.degreesL1CrossPoint.toInt(),
+              distanceL2CrossPoint: _now.distanceL2CrossPoint.toInt(),
+              degreesL2CrossPoint: _now.degreesL2CrossPoint.toInt(),
               sound: sound,
             ),
           );

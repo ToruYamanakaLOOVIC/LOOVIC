@@ -12,11 +12,13 @@ part 'JsonNavigationParams.g.dart';
 abstract class JsonNavigationParams with _$JsonNavigationParams {
   const factory JsonNavigationParams([
     @Default(0) int naviIndex,
-    @Default(0) double distance,
-    @Default(0) double degrees,
-    @Default(0) double distanceNext,
-    @Default(0) double degreesNext,
-    @Default(0) double distanceCrossPoint,
+    @Default(0) double distanceNextPoint,
+    @Default(0) double degreesNextPoint,
+    @Default(0) double angleNextLine,
+    @Default(0) double distanceL2CrossPoint,
+    @Default(0) double degreesL2CrossPoint,
+    @Default(0) double distanceL1CrossPoint,
+    @Default(0) double degreesL1CrossPoint,
     @Default([]) List<JsonLatLng> latlng,
     @Default([]) List<bool> activeLatLng,
     @Default(false) bool isRouteNavigation,
