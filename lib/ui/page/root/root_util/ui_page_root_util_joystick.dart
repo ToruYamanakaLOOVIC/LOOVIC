@@ -97,10 +97,16 @@ class TouchControlState extends State<TouchControl> {
   int _direction = 0;
   double _degrees = 0;
 
+  int _nowPoint = 0;
+  int _goalPoint = 1;
+
   double _distance = 0;
   double _trun = 0;
-  double _cross = 0;
   double _sound = 0;
+  double _l1r = 0;
+  double _l1d = 0;
+  double _l2r = 0;
+  double _l2d = 0;
   final List<String> _directionText = [
     'North',
     '	North-northeast',
@@ -175,156 +181,239 @@ class TouchControlState extends State<TouchControl> {
   bool hitTestSelf(Offset position) => true;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Divider(height: 10),
-        SizedBox(
-          height: 30,
-          child: Text(
-            _directionText[_direction],
-            style: const TextStyle(
-              fontSize: 24,
-              fontFamily: 'NotoSerif',
-              fontWeight: FontWeight.normal,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Divider(height: 10),
+          SizedBox(
+            height: 30,
+            child: Text(
+              _directionText[_direction],
+              style: const TextStyle(
+                fontSize: 24,
+                fontFamily: 'NotoSerif',
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
-        ),
-        const Divider(height: 10),
-        const Divider(height: 10),
-        GestureDetector(
-          onPanUpdate: (DragUpdateDetails details) {
-            onChanged(details.localPosition);
-          },
-          onPanStart: (DragStartDetails details) {
-            onChanged(details.localPosition);
-          },
-          onPanEnd: (DragEndDetails details) {
-            //onChanged(Offset(_joysticSize / 2, _joysticSize / 2));
-          },
-          behavior: HitTestBehavior.deferToChild,
-          child: CustomPaint(
-            size: Size(_joysticSize, _joysticSize),
-            painter: TouchControlPainter(xPos, yPos),
-          ),
-        ),
-        Row(
-          children: [
-            const Text('次のポイントまでの距離'),
-            Expanded(
-              child: Slider(
-                value: _distance,
-                min: 0,
-                max: 100,
-                divisions: 100,
-                label: _distance.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _distance = value;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Text('次のポイントの曲がり角'),
-            Expanded(
-              child: Slider(
-                value: _trun,
-                min: 0,
-                max: 359,
-                divisions: 359,
-                label: _trun.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _trun = value;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Text('線分の距離'),
-            Expanded(
-              child: Slider(
-                value: _cross,
-                min: 0,
-                max: 1000,
-                divisions: 500,
-                label: _cross.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _cross = value;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Text('音量'),
-            Expanded(
-              child: Slider(
-                value: _sound,
-                min: 0,
-                max: 100,
-                divisions: 100,
-                label: _sound.round().toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _sound = value;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-        Text('cmd:$_cmd'),
-        RaisedButton(
-          onPressed: () async {
-            setState(() {
-              _isSend = !_isSend;
-            });
-            if (_isSend) {
-              timerInitialized = true;
-              timer = Timer.periodic(
-                Duration(milliseconds: widget.interval),
-                (Timer t) {
-                  _cmd = tcpComndNaviVer2(
-                    distanceNextPoint: _distance.toInt(),
-                    degreesNextPoint: _degrees.toInt(),
-                    angleNextLine: _trun.toInt(),
-                    distanceL2CrossPoint: _cross.toInt(),
-                    sound: _sound.toInt(),
-                  );
-                  //tcp 送信
-                  tcpSend(
-                    cmd: _cmd,
-                    onListen: (String value) {},
-                  );
-                  setState(() {});
-                },
-              );
-            } else {
-              timer?.cancel();
-            }
-          },
-          color: Colors.blueAccent,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Text(
-            !_isSend ? '送信開始' : '送信停止',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
+          const Divider(height: 10),
+          const Divider(height: 10),
+          GestureDetector(
+            onPanUpdate: (DragUpdateDetails details) {
+              onChanged(details.localPosition);
+            },
+            onPanStart: (DragStartDetails details) {
+              onChanged(details.localPosition);
+            },
+            onPanEnd: (DragEndDetails details) {
+              //onChanged(Offset(_joysticSize / 2, _joysticSize / 2));
+            },
+            behavior: HitTestBehavior.deferToChild,
+            child: CustomPaint(
+              size: Size(_joysticSize, _joysticSize),
+              painter: TouchControlPainter(xPos, yPos),
             ),
           ),
-        ),
-      ],
+          Row(
+            children: [
+              const Text('次のポイントまでの距離'),
+              Expanded(
+                child: Slider(
+                  value: _distance,
+                  min: 0,
+                  max: 100,
+                  divisions: 100,
+                  label: _distance.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _distance = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('次のポイントの曲がり角'),
+              Expanded(
+                child: Slider(
+                  value: _trun,
+                  min: 0,
+                  max: 359,
+                  divisions: 359,
+                  label: _trun.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _trun = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('現在のポイント'),
+              Expanded(
+                child: Slider(
+                  value: _nowPoint.toDouble(),
+                  min: 0,
+                  max: 5,
+                  divisions: 5,
+                  label: _nowPoint.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _nowPoint = value.toInt();
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('ゴールポイント'),
+              Expanded(
+                child: Slider(
+                  value: _goalPoint.toDouble(),
+                  min: 0,
+                  max: 5,
+                  divisions: 5,
+                  label: _goalPoint.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _goalPoint = value.toInt();
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('音量'),
+              Expanded(
+                child: Slider(
+                  value: _sound,
+                  min: 0,
+                  max: 100,
+                  divisions: 100,
+                  label: _sound.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _sound = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('L1までの距離'),
+              Expanded(
+                child: Slider(
+                  value: _l1d,
+                  min: 0,
+                  max: 110,
+                  divisions: 110,
+                  label: _l1d.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _l1d = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('L2までの距離'),
+              Expanded(
+                child: Slider(
+                  value: _l2d,
+                  min: 0,
+                  max: 110,
+                  divisions: 110,
+                  label: _l2d.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _l2d = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('L2までの方位'),
+              Expanded(
+                child: Slider(
+                  value: _l2r,
+                  min: 0,
+                  max: 360,
+                  divisions: 360,
+                  label: _l2r.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _l2r = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Text('cmd:$_cmd'),
+          RaisedButton(
+            onPressed: () async {
+              setState(() {
+                _isSend = !_isSend;
+              });
+              if (_isSend) {
+                timerInitialized = true;
+                timer = Timer.periodic(
+                  Duration(milliseconds: widget.interval),
+                  (Timer t) {
+                    _cmd = tcpComndNaviVer2(
+                      distanceNextPoint: _distance.toInt(),
+                      degreesNextPoint: _degrees.toInt(),
+                      angleNextLine: _trun.toInt(),
+                      sound: _sound.toInt(),
+                      index: _nowPoint.toInt(),
+                      indexLast: _goalPoint,
+                      distanceL1CrossPoint: _l1d.toInt(),
+                      degreesL1CrossPoint: _l1r.toInt(),
+                      distanceL2CrossPoint: _l2d.toInt(),
+                      degreesL2CrossPoint: _l2r.toInt(),
+                    );
+                    //tcp 送信
+                    tcpSend(
+                      cmd: _cmd,
+                      onListen: (String value) {},
+                    );
+                    setState(() {});
+                  },
+                );
+              } else {
+                timer?.cancel();
+              }
+            },
+            color: Colors.blueAccent,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Text(
+              !_isSend ? '送信開始' : '送信停止',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
