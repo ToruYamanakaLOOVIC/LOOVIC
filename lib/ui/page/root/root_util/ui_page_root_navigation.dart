@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loovic/module/json/JsonNavigationParams.dart';
 import 'package:loovic/providers/app_provider.dart';
@@ -63,7 +64,7 @@ class UiPageRootNavigation extends HookConsumerWidget {
           position.longitude != 0.0 &&
           //ポイントが設定されている
           editRouteProvier.potisons.isNotEmpty) {
-        if (editRouteProvier.potisons.length > 2) {
+        if (_now.naviIndex < editRouteProvier.potisons.length) {
           //保温位置更新
           _position.value = JsonLatLng(
             position.latitude,
@@ -95,12 +96,33 @@ class UiPageRootNavigation extends HookConsumerWidget {
               indexPoint++;
             }
           }
-          if (indexPoint >= editRouteProvier.potisons.length - 1) {
-            return;
-          }
+
           //緯度経度を表示
           debugPrint('$position');
-
+          //ゴール
+          if (indexPoint >= editRouteProvier.potisons.length - 1 &&
+              indexPoint > 0) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CupertinoAlertDialog(
+                  title: const Text('ゴール'),
+                  content: const Text('案内を終了します'),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      child: const Text('OK'),
+                      isDestructiveAction: true,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+            return;
+          }
           //現在地
           final p0 = LatLng(position.latitude, position.longitude);
           //一つ前の案内ポイント
@@ -150,30 +172,6 @@ class UiPageRootNavigation extends HookConsumerWidget {
                   360)
               .round()
               .toDouble();
-          /*
-                  //当たり判定
-                  for (var point in editRouteProvier.potisons) {
-                    //まだ通っていない場合
-                    if (point.acrive) {
-                      final i = editRouteProvier.potisons.indexOf(point);
-                      final distance = ((Geolocator.distanceBetween(
-                                    position.latitude,
-                                    position.longitude,
-                                    point.lat,
-                                    point.lng,
-                                  ) *
-                                  10)
-                              .round()
-                              .toDouble()) /
-                          10;
-                      final radius = appProvider.radius * 2;
-                      //ポイントまで設定距離を切った時の判定
-                      if (distance < radius) {
-                        editRouteNotifer.active(i, false);
-                      }
-                    }
-                  }
-                  */
 
           //交点に対する距離(p2 -> p3 の線分に対するp0の交点)
           final l1CrossPoint = pLCrossPoint(
