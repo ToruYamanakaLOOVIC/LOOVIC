@@ -38,6 +38,10 @@ class UiPageRootNavigation extends HookConsumerWidget {
     var appProvider = ref.watch(apptNotifierProvider);
     var editRouteProvier = ref.read(editRouteListNotifierProvider);
     var editRouteNotifer = ref.read(editRouteListNotifierProvider.notifier);
+
+    final routeProvider = ref.watch(routeLogsListNotifierProvider);
+    final routeNotifer = ref.watch(routeLogsListNotifierProvider.notifier);
+
     //現在位置
     var _position = useState(const JsonLatLng());
     //
@@ -74,6 +78,9 @@ class UiPageRootNavigation extends HookConsumerWidget {
           var indexPoint = _now.naviIndex;
 
           //当たり判定(目標の１ポイント)
+
+          //位置の保存
+          await routeNotifer.add(_position.value);
           //まだ通っていない場合
           if (editRouteProvier.potisons[indexPoint].acrive) {
             final i = editRouteProvier.potisons
@@ -387,12 +394,11 @@ class UiPageRootNavigation extends HookConsumerWidget {
         editRouteNotifer.reset();
         _now = _now.copyWith(naviIndex: 0);
         //位置情報ログを送信
-        final provider = ref.watch(routeLogsListNotifierProvider);
-        if (provider.potisons.length > 1) {
-          var appProvider = ref.watch(apptNotifierProvider);
-          httpRepositoryMovementUpdate(
-              uid: appProvider.uID, list: provider.potisons);
+        if (routeNotifer.state.potisons.isNotEmpty) {
+          //   httpRepositoryMovementUpdate(
+          //     uid: appProvider.uID, list: routeNotifer.state.potisons);
         }
+        routeNotifer.removeAll();
         debugPrint('dispose!');
       };
     }, []);
