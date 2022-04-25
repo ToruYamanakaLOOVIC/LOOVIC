@@ -107,7 +107,7 @@ class UiPageRootNavigation extends HookConsumerWidget {
           //緯度経度を表示
           debugPrint('$position');
           //ゴール
-          if (indexPoint >= editRouteProvier.potisons.length - 1 &&
+          if (indexPoint > editRouteProvier.potisons.length - 1 &&
               indexPoint > 0) {
             showDialog(
               context: context,

@@ -22,7 +22,7 @@ class UiPageRootEditSearchHistory extends HookConsumerWidget {
 
     useEffect(() {
       debugPrint('useEffect like initState()');
-      httpRepositorySearchList(uid: appProvider.uID)
+      httpRepositorySearchList(context, uid: appProvider.uID)
           .then((value) => history.value = value);
 
       return () {

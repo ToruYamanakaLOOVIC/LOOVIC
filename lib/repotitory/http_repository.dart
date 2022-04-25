@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loovic/module/json/JsonHistory.dart';
 import 'package:loovic/module/json/JsonLatLng.dart';
@@ -41,31 +42,39 @@ Future<List<LatLng>> httpRepositorySearch(
       'from': from,
       'to': to,
     };
-    await Dio()
+    await Dio(BaseOptions(
+            receiveDataWhenStatusError: true,
+            connectTimeout: 10 * 1000,
+            receiveTimeout: 10 * 1000))
         .post(
-          url,
-          data: FormData.fromMap(payload),
-          options: Options(
-            headers: {},
-          ),
-        )
-        .then((response) {})
-        .catchError((err) {
-//   print(err);
-//    return null;
+      url,
+      data: FormData.fromMap(payload),
+      options: Options(
+        headers: {},
+      ),
+    )
+        .then((response) async {
+      try {
+        result = await googleMapPolyline.getPolylineCoordinatesWithAddress(
+            origin: from, destination: to, mode: RouteMode.walking);
+        await Future.delayed(const Duration(milliseconds: 500));
+        Navigator.pop(context);
+      } catch (e) {
+        Navigator.pop(context);
+        errorDialog(context);
+      }
+    }).catchError((err) {
+      Navigator.pop(context);
+      errorDialog(context);
     });
-
-    result = await googleMapPolyline.getPolylineCoordinatesWithAddress(
-        origin: from, destination: to, mode: RouteMode.walking);
-    await Future.delayed(const Duration(milliseconds: 500));
-    Navigator.pop(context);
 
     return result!;
   }
 }
 
 //ルート検索りれき
-Future<JsonSaerchHistory> httpRepositorySearchList({
+Future<JsonSaerchHistory> httpRepositorySearchList(
+  BuildContext context, {
   String uid = 'test',
 }) async {
   const url = 'http://54.189.110.185/api/search_history';
@@ -74,7 +83,10 @@ Future<JsonSaerchHistory> httpRepositorySearchList({
   final payload = {
     'uid': uid,
   };
-  await Dio()
+  await Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 10 * 1000,
+          receiveTimeout: 10 * 1000))
       .post(
     url,
     data: FormData.fromMap(payload),
@@ -83,16 +95,20 @@ Future<JsonSaerchHistory> httpRepositorySearchList({
     ),
   )
       .then((response) {
-    result = JsonSaerchHistory.fromJson(response.data);
+    try {
+      result = JsonSaerchHistory.fromJson(response.data);
+    } catch (e) {
+      errorDialog(context);
+    }
   }).catchError((err) {
-//   print(err);
-//    return null;
+    errorDialog(context);
   });
   return result;
 }
 
 //移動済履歴
-Future<JsonSaerchHistory> httpRepositoryMovementUpdate({
+Future<JsonSaerchHistory> httpRepositoryMovementUpdate(
+  BuildContext context, {
   String uid = 'test',
   List<JsonLatLng> list = const [],
 }) async {
@@ -120,17 +136,21 @@ Future<JsonSaerchHistory> httpRepositoryMovementUpdate({
     ),
   )
       .then((response) {
-    result = JsonSaerchHistory.fromJson(response.data);
+    try {
+      result = JsonSaerchHistory.fromJson(response.data);
+    } catch (e) {
+      errorDialog(context);
+    }
   }).catchError((err) {
-    print(err);
-//    return null;
+    errorDialog(context);
   });
 
   return result;
 }
 
 //移動済履歴
-Future<JsonRootHistory> httpRepositoryMovementHistory({
+Future<JsonRootHistory> httpRepositoryMovementHistory(
+  BuildContext context, {
   String uid = 'test',
 }) async {
   const url = 'http://54.189.110.185/api/movement_history';
@@ -139,7 +159,10 @@ Future<JsonRootHistory> httpRepositoryMovementHistory({
   final payload = {
     'uid': uid,
   };
-  await Dio()
+  await Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 10 * 1000,
+          receiveTimeout: 10 * 1000))
       .post(
     url,
     data: FormData.fromMap(payload),
@@ -148,16 +171,20 @@ Future<JsonRootHistory> httpRepositoryMovementHistory({
     ),
   )
       .then((response) {
-    result = JsonRootHistory.fromJson(response.data);
+    try {
+      result = JsonRootHistory.fromJson(response.data);
+    } catch (e) {
+      errorDialog(context);
+    }
   }).catchError((err) {
-//   print(err);
-//    return null;
+    errorDialog(context);
   });
   return result;
 }
 
 //移動済座標
-Future<List<JsonLatLng>> httpRepositoryMovementPoints({
+Future<List<JsonLatLng>> httpRepositoryMovementPoints(
+  BuildContext context, {
   String uid = 'test',
   int id = 0,
 }) async {
@@ -168,7 +195,10 @@ Future<List<JsonLatLng>> httpRepositoryMovementPoints({
     'uid': uid,
     'id': id,
   };
-  await Dio()
+  await Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 10 * 1000,
+          receiveTimeout: 10 * 1000))
       .post(
     url,
     data: FormData.fromMap(payload),
@@ -177,19 +207,22 @@ Future<List<JsonLatLng>> httpRepositoryMovementPoints({
     ),
   )
       .then((response) {
-    final jsonMap = jsonDecode(response.data['points']['points']);
-    for (var p in jsonMap) {
-      final lat = double.parse(p['lat']);
-      final lng = double.parse(p['lng']);
+    try {
+      final jsonMap = jsonDecode(response.data['points']['points']);
+      for (var p in jsonMap) {
+        final lat = double.parse(p['lat']);
+        final lng = double.parse(p['lng']);
 
-      result.add(JsonLatLng(
-        lat,
-        lng,
-      ));
+        result.add(JsonLatLng(
+          lat,
+          lng,
+        ));
+      }
+    } catch (e) {
+      errorDialog(context);
     }
   }).catchError((err) {
-//   print(err);
-//    return null;
+    errorDialog(context);
   });
   return result;
 }
@@ -220,7 +253,10 @@ Future<bool> httpRepositoryLogin(
     'uid': uid,
   };
   var result = false;
-  await Dio()
+  await Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 10 * 1000,
+          receiveTimeout: 10 * 1000))
       .post(
     url,
     data: FormData.fromMap(payload),
@@ -229,11 +265,15 @@ Future<bool> httpRepositoryLogin(
     ),
   )
       .then((response) {
-    final res = response.data as Map<String, dynamic>;
-    final code = res['status'];
-    if (code == 'OK') {
-      result = true;
-    } else {
+    try {
+      final res = response.data as Map<String, dynamic>;
+      final code = res['status'];
+      if (code == 'OK') {
+        result = true;
+      } else {
+        result = false;
+      }
+    } catch (e) {
       result = false;
     }
   }).catchError((err) {
@@ -241,6 +281,54 @@ Future<bool> httpRepositoryLogin(
   });
   await Future.delayed(const Duration(milliseconds: 500));
   Navigator.pop(context);
+  if (!result) {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text('ログイン失敗'),
+          content: const Text('ログインに失敗しました。　通信できない状況でアプリを利用しますか？'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('いいえ'),
+              isDestructiveAction: true,
+              onPressed: () async {
+                result = false;
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: const Text('はい'),
+              onPressed: () async {
+                result = true;
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   return result;
   // return pins!;
+}
+
+Future<void> errorDialog(BuildContext context) async {
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return CupertinoAlertDialog(
+        title: const Text('通信失敗'),
+        content: const Text('通信に失敗しました。'),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text('OK'),
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

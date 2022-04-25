@@ -69,7 +69,7 @@ class UiPageRootEdit extends HookConsumerWidget {
                 ),
               ) as JsonRootParam;
               if (result.id != 0) {
-                final route = await httpRepositoryMovementPoints(
+                final route = await httpRepositoryMovementPoints(context,
                     uid: appProvider.uID, id: result.id);
 
                 _editRouteNotifer.state =

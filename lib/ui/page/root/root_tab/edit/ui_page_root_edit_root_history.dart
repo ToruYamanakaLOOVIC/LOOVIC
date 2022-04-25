@@ -22,7 +22,7 @@ class UiPageRootEditRootHistory extends HookConsumerWidget {
 
     useEffect(() {
       debugPrint('useEffect like initState()');
-      httpRepositoryMovementHistory(uid: appProvider.uID)
+      httpRepositoryMovementHistory(context, uid: appProvider.uID)
           .then((value) => history.value = value);
 
       return () {
