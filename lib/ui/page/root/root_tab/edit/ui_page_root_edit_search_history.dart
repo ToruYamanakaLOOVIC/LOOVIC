@@ -21,6 +21,7 @@ class UiPageRootEditSearchHistory extends HookConsumerWidget {
     final history = useState(const JsonSaerchHistory());
 
     useEffect(() {
+      history.value = const JsonSaerchHistory();
       debugPrint('useEffect like initState()');
       httpRepositorySearchList(context, uid: appProvider.uID)
           .then((value) => history.value = value);
@@ -42,26 +43,33 @@ class UiPageRootEditSearchHistory extends HookConsumerWidget {
         //カルーセルページ
         body: Container(
           color: const Color.fromARGB(0xff, 0xF0, 0xF3, 0xF6),
-          child: ListView.builder(
-            itemCount: history.value.history.length,
-            itemBuilder: (BuildContext context, int index) {
-              DateTime datetime =
-                  DateTime.parse('${history.value.history[index].date}Z')
-                      .toLocal(); // StringからDate
+          child: history.value.history.isNotEmpty
+              ? ListView.builder(
+                  itemCount: history.value.history.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DateTime datetime =
+                        DateTime.parse('${history.value.history[index].date}Z')
+                            .toLocal(); // StringからDate
 
-              var formatter = DateFormat('yyyy/MM/dd(E) HH:mm', 'ja_JP');
-              return Card(
-                child: ListTile(
-                  title: Text(
-                      '${history.value.history[index].from} -> ${history.value.history[index].to}'),
-                  subtitle: Text(formatter.format(datetime)),
-                  onTap: () {
-                    Navigator.pop(context, history.value.history[index]);
+                    var formatter = DateFormat('yyyy/MM/dd(E) HH:mm', 'ja_JP');
+                    return Card(
+                      child: ListTile(
+                        title: Text(
+                            '${history.value.history[index].from} -> ${history.value.history[index].to}'),
+                        subtitle: Text(formatter.format(datetime)),
+                        onTap: () {
+                          Navigator.pop(context, history.value.history[index]);
+                        },
+                      ),
+                    );
                   },
+                )
+              : Card(
+                  child: ListTile(
+                    title: const Text('-'),
+                    onTap: () {},
+                  ),
                 ),
-              );
-            },
-          ),
         ),
       ),
     );

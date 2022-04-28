@@ -128,8 +128,9 @@ class UiPageRootNavigation extends HookConsumerWidget {
                 );
               },
             );
-            return;
+            //           return;
           }
+
           //現在地
           final p0 = LatLng(position.latitude, position.longitude);
           //一つ前の案内ポイント
@@ -139,14 +140,21 @@ class UiPageRootNavigation extends HookConsumerWidget {
             editRouteProvier.potisons[indexP1].lng,
           );
           //目標ポイント
-          final indexP2 = indexP1 == 0 ? 1 : indexPoint;
+          var indexP2 = indexP1 == 0 ? 1 : indexPoint;
+          indexP2 = indexP2 < editRouteProvier.potisons.length
+              ? indexP2
+              : editRouteProvier.potisons.length - 1;
+          var a = 0;
           final p2 = LatLng(
             editRouteProvier.potisons[indexP2].lat,
             editRouteProvier.potisons[indexP2].lng,
           );
           //先のポイント目標ポイント
-          final indexP3 = editRouteProvier.potisons.length - 1 > indexP2
+          var indexP3 = editRouteProvier.potisons.length - 1 > indexP2
               ? indexP2 + 1
+              : editRouteProvier.potisons.length - 1;
+          indexP3 = indexP3 < editRouteProvier.potisons.length
+              ? indexP3
               : editRouteProvier.potisons.length - 1;
           final p3 = LatLng(
             editRouteProvier.potisons[indexP3].lat,
@@ -164,10 +172,10 @@ class UiPageRootNavigation extends HookConsumerWidget {
                   .round()
                   .toDouble()) /
               10;
-          //目標までの方位を計算(p0 -> p2)
+          //目標までの方位を計算(p1 -> p2)
           final degreesNextPoint = (((((Geolocator.bearingBetween(
-                                    p0.latitude,
-                                    p0.longitude,
+                                    p1.latitude,
+                                    p1.longitude,
                                     p2.latitude,
                                     p2.longitude,
                                   ) *
@@ -309,28 +317,27 @@ class UiPageRootNavigation extends HookConsumerWidget {
 
     //ロケーションを起動
     void location() {
-      if (_positionStreamSubscription == null) {
-        Geolocator.getLastKnownPosition().then(
-          (Position? position) async {
-            await naviSend(position!);
-          },
-        );
-        final positionStream = Geolocator.getPositionStream();
+      Geolocator.getLastKnownPosition().then(
+        (Position? position) async {
+          await naviSend(position!);
+        },
+      );
 
-        _positionStreamSubscription = positionStream.handleError(
-          //streamがerrorの時
-          (error) {
-            _positionStreamSubscription?.cancel();
-            _positionStreamSubscription = null;
-          },
-        ).listen(
-          // ignore: void_checks
-          (Position position) async {
-            await naviSend(position);
-          },
-        );
-        _positionStreamSubscription?.pause();
-      }
+      final positionStream = Geolocator.getPositionStream();
+
+      _positionStreamSubscription = positionStream.handleError(
+        //streamがerrorの時
+        (error) {
+          _positionStreamSubscription?.cancel();
+          _positionStreamSubscription = null;
+        },
+      ).listen(
+        // ignore: void_checks
+        (Position position) async {
+          await naviSend(position);
+        },
+      );
+      _positionStreamSubscription?.pause();
     }
 
     //一定時間でtcp送信
@@ -398,6 +405,9 @@ class UiPageRootNavigation extends HookConsumerWidget {
           //   httpRepositoryMovementUpdate(
           //     uid: appProvider.uID, list: routeNotifer.state.potisons);
         }
+
+        _positionStreamSubscription?.cancel();
+        _positionStreamSubscription = null;
         routeNotifer.removeAll();
         debugPrint('dispose!');
       };
@@ -428,14 +438,16 @@ class UiPageRootNavigation extends HookConsumerWidget {
                       children: [
                         Text(
                             '現在位置${_position.value.lat} , ${_position.value.lng}° '),
-                        Text('次のポイント${_now.naviIndex}番目'),
-                        Text('次のポイントまで${_now.distanceNextPoint}m '),
-                        Text('次のポイント方位${_now.degreesNextPoint}° '),
-                        Text('曲がり角の角度${_now.angleNextLine}°'),
-                        Text('L1までの距離${_now.distanceL1CrossPoint}m'),
-                        Text('L1までの方位${_now.degreesL1CrossPoint}°'),
-                        Text('L2までの距離${_now.distanceL2CrossPoint}m'),
-                        Text('L2までの方位${_now.degreesL2CrossPoint}°'),
+                        Text('0:p1 -> p2 方位${_now.degreesNextPoint}° '),
+                        Text('1:p0 -> p2 距離${_now.distanceNextPoint}m '),
+                        Text('2:曲がり角の角度${_now.angleNextLine}°'),
+                        Text('3:案内中のポイント${_now.naviIndex}番目'),
+                        Text('4:ゴールのポイント$editRouteLenght番目'),
+                        Text('5:L1までの距離${_now.distanceL1CrossPoint}m'),
+                        Text('7:L2までの方位${_now.degreesL2CrossPoint}°'),
+                        Text('8:L2までの距離${_now.distanceL2CrossPoint}m'),
+                        Text('9:p1 -> p2 方位${_now.degreesNextPoint}° '),
+                        Text(' :L1までの方位${_now.degreesL1CrossPoint}°'),
                         Text('コマンド${_cmd.value}'),
                       ],
                     ),
