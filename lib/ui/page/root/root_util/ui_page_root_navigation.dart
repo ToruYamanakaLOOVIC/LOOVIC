@@ -309,6 +309,8 @@ class UiPageRootNavigation extends HookConsumerWidget {
             distanceL1CrossPoint: distanceL1CrossPoint,
             degreesL2CrossPoint: degreesL2CrossPoint,
             distanceL2CrossPoint: distanceL2CrossPoint,
+            lat: position.latitude,
+            lng: position.longitude,
             angleNextLine: angleL1,
           );
         }
@@ -365,6 +367,8 @@ class UiPageRootNavigation extends HookConsumerWidget {
               degreesL1CrossPoint: _now.degreesL1CrossPoint.toInt(),
               distanceL2CrossPoint: _now.distanceL2CrossPoint.toInt(),
               degreesL2CrossPoint: _now.degreesL2CrossPoint.toInt(),
+              lat: (_now.lat * 100000).toInt(),
+              lng: (_now.lng * 100000).toInt(),
               sound: sound,
             );
             tcpSend(
@@ -439,10 +443,10 @@ class UiPageRootNavigation extends HookConsumerWidget {
                         Text(
                             '現在位置${_position.value.lat} , ${_position.value.lng}° '),
                         Text('0:p1 -> p2 方位${_now.degreesNextPoint}° '),
-                        Text('1:p0 -> p2 距離${_now.distanceNextPoint}m '),
-                        Text('2:曲がり角の角度${_now.angleNextLine}°'),
-                        Text('3:案内中のポイント${_now.naviIndex}番目'),
-                        Text('4:ゴールのポイント$editRouteLenght番目'),
+                        Text('1:案内中のポイント${_now.naviIndex}番目'),
+                        Text('2:ゴールのポイント$editRouteLenght番目'),
+                        Text('3:緯度${_now.lat}'),
+                        Text('4:経度${_now.lng}'),
                         Text('5:L1までの距離${_now.distanceL1CrossPoint}m'),
                         Text('7:L2までの方位${_now.degreesL2CrossPoint}°'),
                         Text('8:L2までの距離${_now.distanceL2CrossPoint}m'),

@@ -87,20 +87,33 @@ String tcpComndNaviVer2({
   int degreesL1CrossPoint = 0,
   int distanceL2CrossPoint = 0,
   int degreesL2CrossPoint = 0,
+  int lat = 0,
+  int lng = 0,
   int sound = 0,
 }) {
   //0~99
   if (distanceNextPoint >= 100) {
     distanceNextPoint = 99;
   }
+
+  if (index >= 100) {
+    index = 99;
+  }
+  if (indexLast >= 100) {
+    indexLast = 99;
+  }
   if (distanceL2CrossPoint > 99999) {
     distanceL2CrossPoint = 99999;
   }
   final cmd0 = degreesNextPoint.toString().padLeft(3, '0');
-  final cmd1 = distanceNextPoint.toString().padLeft(2, '0');
-  final cmd2 = angleNextLine.toString().padLeft(5, '0');
-  final cmd3 = index.toString().padLeft(5, '0');
-  final cmd4 = indexLast.toString().padLeft(5, '0');
+//  final cmd1 = distanceNextPoint.toString().padLeft(2, '0');
+  final cmd1 = index.toString().padLeft(2, '0');
+//  final cmd2 = angleNextLine.toString().padLeft(5, '0');
+  final cmd2 = indexLast.toString().padLeft(5, '0');
+//  final cmd3 = index.toString().padLeft(5, '0');
+//  final cmd4 = indexLast.toString().padLeft(5, '0');
+  final cmd3 = lat.toString().substring(0, 5);
+  final cmd4 = lng.toString().substring(1, 6);
   final cmd5 = distanceL1CrossPoint.toString().padLeft(5, '0');
   final cmd6 = sound.toString().padLeft(5, '0');
   final cmd7 = degreesL2CrossPoint.toString().padLeft(5, '0');

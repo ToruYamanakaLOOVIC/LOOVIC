@@ -107,6 +107,8 @@ class TouchControlState extends State<TouchControl> {
   double _l1d = 0;
   double _l2r = 0;
   double _l2d = 0;
+  double _lat = 35439;
+  double _lng = 139562;
   final List<String> _directionText = [
     'North',
     '	North-northeast',
@@ -216,44 +218,6 @@ class TouchControlState extends State<TouchControl> {
           ),
           Row(
             children: [
-              const Text('次のポイントまでの距離'),
-              Expanded(
-                child: Slider(
-                  value: _distance,
-                  min: 0,
-                  max: 100,
-                  divisions: 100,
-                  label: _distance.round().toString(),
-                  onChanged: (double value) {
-                    setState(() {
-                      _distance = value;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Text('次のポイントの曲がり角'),
-              Expanded(
-                child: Slider(
-                  value: _trun,
-                  min: 0,
-                  max: 359,
-                  divisions: 359,
-                  label: _trun.round().toString(),
-                  onChanged: (double value) {
-                    setState(() {
-                      _trun = value;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
               const Text('現在のポイント'),
               Expanded(
                 child: Slider(
@@ -284,6 +248,44 @@ class TouchControlState extends State<TouchControl> {
                   onChanged: (double value) {
                     setState(() {
                       _goalPoint = value.toInt();
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('緯度(20~46)'),
+              Expanded(
+                child: Slider(
+                  value: _lat.toDouble(),
+                  min: 20000,
+                  max: 46999,
+                  divisions: 46999,
+                  label: _lat.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _lat = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text('緯度(122~154)'),
+              Expanded(
+                child: Slider(
+                  value: _lng.toDouble(),
+                  min: 120000,
+                  max: 154999,
+                  divisions: 154999,
+                  label: _lng.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _lng = value;
                     });
                   },
                 ),
@@ -388,6 +390,8 @@ class TouchControlState extends State<TouchControl> {
                       degreesL1CrossPoint: _l1r.toInt(),
                       distanceL2CrossPoint: _l2d.toInt(),
                       degreesL2CrossPoint: _l2r.toInt(),
+                      lat: _lat.toInt(),
+                      lng: _lng.toInt(),
                     );
                     //tcp 送信
                     tcpSend(
