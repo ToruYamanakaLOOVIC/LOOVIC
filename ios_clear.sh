@@ -10,5 +10,7 @@ flutter clean
 flutter pub cache repair
 
 #podfile削除
-rm ios/Podfile
+#rm ios/Podfile
 rm ios/Podfile.lock
+
+flutter pub get
